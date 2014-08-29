@@ -1,0 +1,30 @@
+<!-- -->
+<launch>
+	<node pkg="imu_dummy" type="imu_dummy_node" name="imu_dummy" output="screen" >
+		<param name="roll" type="double" value="0.0" />
+		<param name="pitch" type="double" value="0.0" />
+		<param name="yaw" type="double" value="0.0" />
+
+		<param name="cov_or_x" type="double" value="0.01" />
+		<param name="cov_or_y" type="double" value="0.01" />
+		<param name="cov_or_z" type="double" value="0.01" />
+
+		<param name="vel_x" type="double" value="0.1" />
+		<param name="vel_y" type="double" value="0.0" />
+		<param name="vel_z" type="double" value="0.0" />
+
+		<param name="cov_vel_x" type="double" value="0.01" />
+		<param name="cov_vel_y" type="double" value="0.01" />
+		<param name="cov_vel_z" type="double" value="0.01" />
+
+		<param name="acc_x" type="double" value="0.0" />
+		<param name="acc_y" type="double" value="0.0" />
+		<param name="acc_z" type="double" value="0.0" />
+
+		<param name="cov_acc_x" type="double" value="0.01" />
+		<param name="cov_acc_y" type="double" value="0.01" />
+		<param name="cov_acc_z" type="double" value="0.01" />
+		
+		<param name="simulate_movement" type="bool" value="false" />
+	</node>
+</launch>
