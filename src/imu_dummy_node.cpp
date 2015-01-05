@@ -28,9 +28,14 @@ imu_dummy::imu_dummy() {
     nh.param("/imu_dummy/cov_acc_y", this->cov_acc_y, 0.01);                  //standard deviation in degrees
     nh.param("/imu_dummy/cov_acc_z", this->cov_acc_z, 0.01);                  //standard deviation in degrees
     nh.param<std::string>("/imu_dummy/frameID", this->frameID, "/camera_link");
+    nh.param<bool>("/imu_dummy/use_arduino_msg", this->useArduinoMsg, false);    //TODO
     nh.param<bool>("/imu_dummy/simulate_movement", this->simMovement, false);    //TODO
 
+    accSubscriber = nh.subscribe("/acc", 1, &imu_dummy::accCallback, this);
+    yprSubscriber = nh.subscribe("/ypr", 1, &imu_dummy::yprCallback, this);
     imuPublisher = nh.advertise<sensor_msgs::Imu>("/imu", 10, this);
+
+    this->createDummyMsg();
 }
  
 void imu_dummy::createDummyMsg(){
@@ -100,6 +105,52 @@ void imu_dummy::loop(){
         rate.sleep();
     }
 }
+
+void imu_dummy::accCallback(const geometry_msgs::Vector3::ConstPtr &msg)
+{
+//    geometry_msgs::Quaternion q = m_q;
+
+//    float gravX = 2.0f * (q.y * q.w - q.x * q.z);
+//    float gravY = 2.0f * (q.x * q.y + q.z * q.w);
+//    float gravZ = q.x * q.x - q.y * q.y - q.z * q.z + q.w * q.w;
+
+//    this->imuMsg->linear_acceleration.x = msg->x - gravX;
+//    this->imuMsg->linear_acceleration.y = msg->y - gravY;
+//    this->imuMsg->linear_acceleration.z = msg->z - gravZ;
+
+
+    this->imuMsg->linear_acceleration.x = 0.0;
+    this->imuMsg->linear_acceleration.y = 0.0;
+    this->imuMsg->linear_acceleration.z = 0.0;
+
+    if(fabs(msg->x) > 0.15){
+        this->imuMsg->linear_acceleration.x = msg->x;
+        ROS_INFO("IMU: x valid");
+    }
+    if(fabs(msg->y) > 0.15) {
+        this->imuMsg->linear_acceleration.y = msg->y;
+        ROS_INFO("IMU: y valid");
+    }
+    if(fabs(msg->z) > 0.15) {
+        this->imuMsg->linear_acceleration.z = msg->z;
+        ROS_INFO("IMU: z valid");
+    }
+}
+
+void imu_dummy::yprCallback(const geometry_msgs::Vector3::ConstPtr &msg)
+{
+    tf::Quaternion tfQ = tf::createQuaternionFromRPY(from_degrees(msg->z), from_degrees(msg->y), from_degrees(msg->x));
+    geometry_msgs::Quaternion q;
+
+    tf::quaternionTFToMsg(tfQ, q);
+
+    m_q = q;
+    this->imuMsg->orientation = m_q;
+//    ROS_INFO("Orientation callback");
+}
+
+
+
  
 /**
  * @brief main
@@ -111,6 +162,5 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "imu_dummy");
 
     imu_dummy dummy;
-    dummy.createDummyMsg();
     dummy.loop();
 }

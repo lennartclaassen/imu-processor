@@ -6,6 +6,7 @@
 #include <angles/angles.h>
  
 #include <sensor_msgs/Imu.h>
+#include <geometry_msgs/Vector3.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseArray.h>
 #include <geometry_msgs/PoseWithCovariance.h>
@@ -23,13 +24,19 @@
 class imu_dummy {
     private:
         ros::Publisher  imuPublisher;
+        ros::Subscriber accSubscriber;
+        ros::Subscriber yprSubscriber;
  
         ros::NodeHandle nh;
+
+        void accCallback(const geometry_msgs::Vector3::ConstPtr &msg);
+        void yprCallback(const geometry_msgs::Vector3::ConstPtr &msg);
  
     public:
         imu_dummy();
  
         sensor_msgs::Imu* imuMsg;
+        geometry_msgs::Quaternion m_q;
 
         std::string frameID;
 
@@ -41,6 +48,7 @@ class imu_dummy {
         double acc_x, acc_y, acc_z;                  //linear acceleration values
         double cov_acc_x, cov_acc_y, cov_acc_z;      //covariance vor acceleration values    C_acc = diag(cov_acc_x, cov_acc_y, cov_acc_z)
 
+        bool useArduinoMsg;
         bool simMovement;
 
         void createDummyMsg();
