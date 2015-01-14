@@ -91,7 +91,7 @@ void imu_dummy::simulateMovement(){
  */
 void imu_dummy::loop(){
  
-    ros::Rate rate(200);
+    ros::Rate rate(50);
 
     while(ros::ok()){
         this->imuMsg->header.stamp = ros::Time::now();
@@ -139,7 +139,13 @@ void imu_dummy::accCallback(const geometry_msgs::Vector3::ConstPtr &msg)
 
 void imu_dummy::yprCallback(const geometry_msgs::Vector3::ConstPtr &msg)
 {
-    tf::Quaternion tfQ = tf::createQuaternionFromRPY(from_degrees(msg->z), from_degrees(msg->y), from_degrees(msg->x));
+    float yaw, pitch, roll;
+
+    yaw = ((int)((msg->x)*10.0))/10.0;
+    pitch = ((int)((msg->y)*10.0))/10.0;
+    roll = ((int)((msg->z)*10.0))/10.0;
+
+    tf::Quaternion tfQ = tf::createQuaternionFromRPY(from_degrees(roll), from_degrees(pitch), from_degrees(yaw));
     geometry_msgs::Quaternion q;
 
     tf::quaternionTFToMsg(tfQ, q);
