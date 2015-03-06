@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(imu_dummy)
+project(imu_processor)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -77,7 +77,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES imu_dummy
+#  LIBRARIES imu_processor
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -92,19 +92,19 @@ include_directories(include
   ${catkin_INCLUDE_DIRS}
 )
 ## Declare a cpp library
-# add_library(imu_dummy
-#   src/${PROJECT_NAME}/imu_dummy.cpp
+# add_library(imu_processor
+#   src/${PROJECT_NAME}/imu_processor.cpp
 # )
 
 ## Declare a cpp executable
-add_executable(imu_dummy_node src/imu_dummy_node.cpp)
+add_executable(imu_processor_node src/imu_processor_node.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(imu_dummy_node imu_dummy_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(imu_dummy_node
+target_link_libraries(imu_processor_node
   ${catkin_LIBRARIES}
 )
 
@@ -148,7 +148,7 @@ target_link_libraries(imu_dummy_node
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_imu_dummy.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_imu_processor.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

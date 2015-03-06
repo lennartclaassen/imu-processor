@@ -1,4 +1,4 @@
-imu-dummy
+imu_processor
 =========
 
-Dummy package to generate IMU messages
+Package to process IMU messages
